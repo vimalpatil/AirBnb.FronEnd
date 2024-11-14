@@ -3,11 +3,16 @@ import { useState } from "react";
 export function Propertylisting() {
   const API_URL = "https://localhost:7065/api/Property";
   const [Plist, setPlist] = useState([]);
-  let getPropertyList = async () => {
-    let response = await fetch(API_URL);
 
-    let jsonResponse = await response.json();
-    setPlist(jsonResponse);
+  let getPropertyList = async () => {
+    try {
+      let response = await fetch(API_URL);
+
+      let jsonResponse = await response.json();
+      setPlist(jsonResponse);
+    } catch (err) {
+      console.log("Data fetching error:", err);
+    }
   };
 
   getPropertyList();
@@ -17,23 +22,25 @@ export function Propertylisting() {
       <div className="container">
         <div className="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
           {Plist.map((propList, i) => (
-            <div className="card col listing-card">
-              <img
-                src={`/images/${propList.image_name}`}
-                className="card-img-top"
-                alt="listing_image"
-                style={{ height: "20rem" }}
-              />
+            <a href={`/HomeDetails/${propList.p_id}`} class="listing-link">
+              <div className="card col listing-card">
+                <img
+                  src={`/images/${propList.image_name}`}
+                  className="card-img-top"
+                  alt="listing_image"
+                  style={{ height: "20rem" }}
+                />
 
-              <div className="card-body">
-                <p className="card-text" key={i}>
-                  <b>{propList.title}</b>
-                  <br />
-                  &#8377; {propList.price}
-                  <i className="tax-info">&nbsp;&nbsp;+18% GST</i>
-                </p>
+                <div className="card-body">
+                  <p className="card-text" key={i}>
+                    <b>{propList.title}</b>
+                    <br />
+                    &#8377; {propList.price}
+                    <i className="tax-info">&nbsp;&nbsp;+18% GST</i>
+                  </p>
+                </div>
               </div>
-            </div>
+            </a>
           ))}
 
           {/* <div class="card col listing-card">

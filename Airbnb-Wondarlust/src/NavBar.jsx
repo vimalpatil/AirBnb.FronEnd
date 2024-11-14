@@ -4,7 +4,7 @@ export default function NavaBar() {
   return (
     <nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
       <div class="container-fluid">
-        <a class="navbar-brand" href="/listings">
+        <a class="navbar-brand" href="/">
           <i class="fa-solid fa-compass"></i>
         </a>
         <button
@@ -17,7 +17,7 @@ export default function NavaBar() {
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
-            <a class="nav-link" href="/listings">
+            <a class="nav-link" href="/">
               Explore
             </a>
           </div>
@@ -34,7 +34,7 @@ export default function NavaBar() {
             </form>
           </div>
           <div class="navbar-nav ms-auto">
-            <a class="nav-link" href="/listings/new">
+            <a class="nav-link" href="/AddNewHome">
               Airbnb your home
             </a>
 

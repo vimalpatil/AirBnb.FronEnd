@@ -16,7 +16,10 @@ export function Propertylisting() {
   let signuplogin = 0;
 
   let previousPath;
+  let loginPath;
+
   previousPath = useRef(location?.state?.prevUrl);
+  loginPath = useRef(location?.state?.prevUrl);
   //console.log(location.pathname);
   console.log(previousPath.current);
   if (user) {
@@ -55,6 +58,23 @@ export function Propertylisting() {
           role="alert"
         >
           {"Welcome to wanderlust!"}
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
+      ) : (
+        ""
+      )}
+
+      {loginPath ? (
+        <div
+          class="alert alert-danger alert-dismissible fade show"
+          role="alert"
+        >
+          {"Welcome back to wanderlust!"}
           <button
             type="button"
             class="btn-close"

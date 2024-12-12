@@ -7,7 +7,6 @@ body {
 
 .container {
   flex: 1;
-  height: 73.1vh;
 }
 
 /*navbar*/
@@ -24,6 +23,10 @@ body {
 
 .nav-link {
   color: #222222 !important;
+}
+
+footer {
+  position: relative;
 }
 
 .f-info-links a {

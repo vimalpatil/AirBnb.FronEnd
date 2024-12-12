@@ -8,9 +8,13 @@ import { PropertyDetails } from "./PropertyDetails";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { Usersignup } from "./userSignup";
 import { Login } from "./Login";
+import Map_Coordinates from "./Map_Corrdinates";
+import File_upload from "./File_upload";
 function App() {
   return (
     <>
+      {/* <Map_Coordinates />
+      <File_upload /> */}
       <NavaBar />
       <div className="container">
         <BrowserRouter>

@@ -66,13 +66,12 @@ export default function NavaBar() {
               <a class="nav-link" href="/AddNewHome">
                 Airbnb your home
               </a>{" "}
-              <a
-                class="nav-link"
-                style={{ cursor: "pointer" }}
-                onClick={(e) => handlelogout(e)}
-              >
-                <b>Log out</b>
-              </a>
+              <form onSubmit={(e) => handlelogout(e)} novalidate>
+                <button className="btn nav-link">
+                  {" "}
+                  <b>Log out</b>
+                </button>
+              </form>
             </div>
           ) : (
             <div class="navbar-nav ms-auto">

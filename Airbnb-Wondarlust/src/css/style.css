@@ -25,6 +25,10 @@ body {
   color: #222222 !important;
 }
 
+footer {
+  position: relative;
+}
+
 .f-info-links a {
   text-decoration: none;
   color: #222222;

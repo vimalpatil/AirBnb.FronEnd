@@ -1,22 +1,124 @@
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { useSelector } from "react-redux";
+import { selectUser } from "./features/userSlice";
+import { useLocation } from "react-router-dom";
 
 export function Propertylisting() {
   const API_URL = "https://localhost:7065/api/Property";
   const [Plist, setPlist] = useState([]);
-  let getPropertyList = async () => {
-    let response = await fetch(API_URL);
+  //const [signuplogin, setSignuplogin] = useState(false);
+  //const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const location = useLocation();
 
-    let jsonResponse = await response.json();
-    setPlist(jsonResponse);
-  };
+  const user = useSelector(selectUser);
+  //console.log(user);
 
-  getPropertyList();
+  let signuplogin = 0;
+
+  let previousPath;
+  let loginPath;
+
+  previousPath = useRef(location?.state?.prevUrl);
+  loginPath = useRef(location?.state?.prevUrl);
+  console.log(location.pathname);
+  // console.log(previousPath.current);
+  if (user) {
+    if (previousPath.current === "/usersignup") {
+      // setSignuplogin(true);
+      signuplogin = 1;
+    } else {
+      //setSignuplogin(false);
+      signuplogin = 0;
+    }
+  }
+
+  useEffect(() => {
+    let getPropertyList = async () => {
+      try {
+        let response = await fetch(API_URL);
+
+        let jsonResponse = await response.json();
+        setPlist(jsonResponse);
+      } catch (err) {
+        console.log("Data fetching error:", err);
+      }
+    };
+    getPropertyList();
+  }, []);
+
+  // if (localStorage.getItem("isLogin")) {
+  //   setIsLoggedIn(localStorage.getItem("isLogin"));
+  // }
 
   return (
     <>
-      <div className="container">
-        <div className="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
-          {Plist.map((propList, i) => (
+      {signuplogin ? (
+        <div
+          class="alert alert-danger alert-dismissible fade show"
+          role="alert"
+        >
+          {"Welcome to wanderlust!"}
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
+      ) : (
+        ""
+      )}
+      {previousPath.current === "/AddNewHome" ? (
+        <div
+          class="alert alert-danger alert-dismissible fade show"
+          role="alert"
+        >
+          {"New Property Created!"}
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
+      ) : (
+        ""
+      )}
+      {loginPath ? (
+        <div
+          class="alert alert-danger alert-dismissible fade show"
+          role="alert"
+        >
+          {"Welcome back to wanderlust!"}
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
+      ) : (
+        ""
+      )}
+
+      <div className="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+        {/* {error && (
+          <div
+            class="alert alert-danger alert-dismissible fade show"
+            role="alert"
+          >
+            {error}
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="alert"
+              aria-label="Close"
+            ></button>
+          </div>
+        )} */}
+
+        {Plist.map((propList, i) => (
+          <a href={`/HomeDetails/${propList.p_id}`} class="listing-link">
             <div className="card col listing-card">
               <img
                 src={`/images/${propList.image_name}`}
@@ -34,9 +136,9 @@ export function Propertylisting() {
                 </p>
               </div>
             </div>
-          ))}
-
-          {/* <div class="card col listing-card">
+          </a>
+        ))}
+        {/* <div class="card col listing-card">
             <img
               src="/images/photo-1552733407-5d5c46c3bb3b.jpg"
               className="card-img-top"
@@ -71,7 +173,7 @@ export function Propertylisting() {
               </p>
             </div>
           </div> */}
-          {/* 
+        {/* 
           <div class="card col listing-card">
             <img
               src="/images/photo-1552733407-5d5c46c3bb3b.jpg"
@@ -89,7 +191,6 @@ export function Propertylisting() {
               </p>
             </div>
           </div> */}
-        </div>
       </div>
     </>
   );

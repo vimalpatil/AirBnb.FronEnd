@@ -20,8 +20,8 @@ export function Propertylisting() {
 
   previousPath = useRef(location?.state?.prevUrl);
   loginPath = useRef(location?.state?.prevUrl);
-  //console.log(location.pathname);
-  console.log(previousPath.current);
+  console.log(location.pathname);
+  // console.log(previousPath.current);
   if (user) {
     if (previousPath.current === "/usersignup") {
       // setSignuplogin(true);
@@ -68,7 +68,22 @@ export function Propertylisting() {
       ) : (
         ""
       )}
-
+      {previousPath.current === "/AddNewHome" ? (
+        <div
+          class="alert alert-danger alert-dismissible fade show"
+          role="alert"
+        >
+          {"New Property Created!"}
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
+      ) : (
+        ""
+      )}
       {loginPath ? (
         <div
           class="alert alert-danger alert-dismissible fade show"

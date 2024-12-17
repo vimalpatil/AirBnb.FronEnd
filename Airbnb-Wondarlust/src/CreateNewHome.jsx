@@ -1,17 +1,19 @@
-import { useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useRef, useState, useEffect } from "react";
 import { login } from "./features/userSlice";
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectUser } from "./features/userSlice";
 import axios from "axios";
 import mapboxgl from "mapbox-gl";
-
 mapboxgl.accessToken =
   "pk.eyJ1IjoiaXRzc2FyYW5oZXJlIiwiYSI6ImNsd3B3aDFybjFodTMyaXJ6cGQxeWdwYzcifQ.4HPJRlRvgTdHaXXTDQEWCg";
 
 export function CreateNewHome() {
   const [error, setError] = useState("");
   const [location, setLocation] = useState("");
+  const navigate = useNavigate();
+  const navLocation = useLocation();
   let geometry;
 
   const usernameRef = useRef();
@@ -21,8 +23,22 @@ export function CreateNewHome() {
   const user = useSelector(selectUser);
   let ownerSignup;
   let previousPath;
-
+  console.log(location.pathname);
   let signuplogin = 0;
+  const [dateTime, setDateTime] = useState(new Date());
+
+  const currentDate = new Date();
+
+  const formattedDate = currentDate.toLocaleString("en-GB", {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+
+  console.log(formattedDate.replace(",", ""));
   previousPath = useRef(location?.state?.prevUrl);
   if (user) {
     if (previousPath.current === "/AddNewHome") {
@@ -56,6 +72,50 @@ export function CreateNewHome() {
   const handleInputChange = (e) => {
     setLocation(e.target.value);
   };
+  const [file, setFile] = useState(null);
+  const [Coordinates, setCoordinates] = useState(null);
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  //image upload
+  const handleFileUpload = async () => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      await axios.post("https://localhost:7065/api/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      //alert("File uploaded successfully");
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      alert("Failed to upload file");
+    }
+  };
+  //get map coordinates
+  // const getCoordinates = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `https://api.mapbox.com/geocoding/v5/mapbox.places/${location}.json`,
+  //       {
+  //         params: {
+  //           access_token: mapboxgl.accessToken,
+  //         },
+  //       }
+  //     );
+  //     const { center } = response.data.features[0];
+  //     // setCoordinates({ lat: center[1], lng: center[0] });
+  //     setCoordinates(`'${center[1]}, ${center[0]}'`);
+  //     geometry = `"${center[1]}, ${center[0]}"`;
+  //     console.log(geometry);
+  //   } catch (error) {
+  //     console.error("Error fetching coordinates:", error);
+  //   }
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -69,43 +129,65 @@ export function CreateNewHome() {
       return setError("All Fields are manadatory.");
     }
     setError("");
-    getCoordinates();
 
     try {
+      handleFileUpload;
+
+      try {
+        const response = await axios.get(
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${location}.json`,
+          {
+            params: {
+              access_token: mapboxgl.accessToken,
+            },
+          }
+        );
+        const { center } = response.data.features[0];
+        // setCoordinates({ lat: center[1], lng: center[0] });
+        setCoordinates(`${center[1]}, ${center[0]}`);
+        geometry = `${center[1]}, ${center[0]}`;
+      } catch (error) {
+        console.error("Error fetching coordinates:", error);
+      }
+      console.log(geometry);
+      const today = new Date();
+
       const postpropertyData = {
         title: titleRef.current.value,
         description: desRef.current.value,
-        image_name: imageRef.current.value,
-        price: priceRef.current.value,
+        image_name: file.name,
+        price: Number(priceRef.current.value),
         location: locationRef.current.value,
         geometry_coordinate: geometry,
-        date: Date.now,
+        date: today,
         country: countryRef.current.value,
         user_id: user.userid,
       };
+
+      console.log(postpropertyData);
+
+      const res = await fetch("https://localhost:7065/api/Property", {
+        method: "post",
+        redirect: "follow",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(postpropertyData),
+      });
+      console.log(res.json);
+      if (!res.ok) {
+        const message = `An error has occured: ${res.status} - ${res.statusText}`;
+        throw new Error(message);
+      } else {
+        return navigate("/", { state: { prevUrl: navLocation.pathname } });
+      }
     } catch (err) {
       console.log("Data fetching error:", err);
     }
   };
-  //get map coordinates
-  const getCoordinates = async () => {
-    try {
-      const response = await axios.get(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${location}.json`,
-        {
-          params: {
-            access_token: mapboxgl.accessToken,
-          },
-        }
-      );
-      const { center } = response.data.features[0];
-      // setCoordinates({ lat: center[1], lng: center[0] });
-      geometry = `${center[1]}, ${center[0]}`;
-      console.log(geometry);
-    } catch (error) {
-      console.error("Error fetching coordinates:", error);
-    }
-  };
+
+  //owner SignUp
   const handleUserSubmit = async (e) => {
     e.preventDefault();
     if (
@@ -202,6 +284,7 @@ export function CreateNewHome() {
             <form
               class="needs-validation"
               novalidate
+              onSubmit={handleSubmit}
               enctype="multipart/form-data"
             >
               <div class="mb-3">
@@ -249,6 +332,7 @@ export function CreateNewHome() {
                   id="image"
                   ref={imageRef}
                   type="file"
+                  onChange={(e) => handleFileChange(e)}
                   class="form-control"
                   required
                 />
@@ -259,6 +343,7 @@ export function CreateNewHome() {
                     Price
                   </label>
                   <input
+                    type="number"
                     name="price"
                     id="price"
                     placeholder="1200"

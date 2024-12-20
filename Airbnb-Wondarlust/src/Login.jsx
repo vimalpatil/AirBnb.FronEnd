@@ -3,7 +3,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "./features/userSlice";
 import { useLocation } from "react-router-dom";
-
+import { toast } from "react-toastify";
 export function Login() {
   const [error, setError] = useState("");
   const [userData, setuserData] = useState({});
@@ -45,7 +45,8 @@ export function Login() {
         if (data.user_id == 0) {
           usernameRef.current.value = "";
           passwordRef.current.value = "";
-          return setError("Invalid Username or Password");
+          toast.error("Invalid Username or Password");
+          // return setError("Invalid Username or Password");
         } else {
           dispatch(
             login({
@@ -56,6 +57,7 @@ export function Login() {
               loginfrom: "loginform",
             })
           );
+          toast.success("Welcome back to wanderlust!");
           return navigate("/", { state: { prevUrl: location.pathname } });
         }
       } else {

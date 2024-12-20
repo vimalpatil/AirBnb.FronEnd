@@ -1,9 +1,9 @@
 import { useRef, useState, useEffect } from "react";
 import { login } from "./features/userSlice";
-import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectUser } from "./features/userSlice";
+import { toast } from "react-toastify";
 import axios from "axios";
 import mapboxgl from "mapbox-gl";
 mapboxgl.accessToken =
@@ -27,18 +27,18 @@ export function CreateNewHome() {
   let signuplogin = 0;
   const [dateTime, setDateTime] = useState(new Date());
 
-  const currentDate = new Date();
+  // const currentDate = new Date();
 
-  const formattedDate = currentDate.toLocaleString("en-GB", {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  });
+  // const formattedDate = currentDate.toLocaleString("en-GB", {
+  //   year: "numeric",
+  //   month: "numeric",
+  //   day: "numeric",
+  //   hour: "2-digit",
+  //   minute: "2-digit",
+  //   second: "2-digit",
+  // });
 
-  console.log(formattedDate.replace(",", ""));
+  // console.log(formattedDate.replace(",", ""));
   previousPath = useRef(location?.state?.prevUrl);
   if (user) {
     if (previousPath.current === "/AddNewHome") {
@@ -126,7 +126,8 @@ export function CreateNewHome() {
       countryRef.current.value === "" ||
       locationRef.current.value === ""
     ) {
-      return setError("All Fields are manadatory.");
+      // return setError("All Fields are manadatory.");
+      toast.error("All Fields are manadatory.");
     }
     setError("");
 
@@ -180,6 +181,7 @@ export function CreateNewHome() {
         const message = `An error has occured: ${res.status} - ${res.statusText}`;
         throw new Error(message);
       } else {
+        toast.success("New Property Created!");
         return navigate("/", { state: { prevUrl: navLocation.pathname } });
       }
     } catch (err) {
@@ -195,7 +197,8 @@ export function CreateNewHome() {
       emailRef.current.value === "" ||
       passwordRef.current.value === ""
     ) {
-      return setError("All Fields are manadatory.");
+      //return setError("All Fields are manadatory.");
+      toast.error("All Fields are manadatory.");
     }
     setError("");
     try {
@@ -226,7 +229,8 @@ export function CreateNewHome() {
           usernameRef.current.value = "";
           emailRef.current.value = "";
           passwordRef.current.value = "";
-          return setError("Username or Email Already exist!");
+          // return setError("Username or Email Already exist!");
+          toast.error("Username or Email Already exist!");
         } else {
           dispatch(
             login({
@@ -281,6 +285,20 @@ export function CreateNewHome() {
             <br />
             <br />
             <h3>Create New Home</h3>
+            {error && (
+              <div
+                class="alert alert-danger alert-dismissible fade show"
+                role="alert"
+              >
+                {error}
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="alert"
+                  aria-label="Close"
+                ></button>
+              </div>
+            )}
             <form
               class="needs-validation"
               novalidate

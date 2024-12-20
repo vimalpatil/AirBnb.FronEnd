@@ -4,6 +4,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "./features/userSlice";
 import { useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export function Usersignup() {
   const [error, setError] = useState("");
@@ -26,7 +27,8 @@ export function Usersignup() {
       emailRef.current.value === "" ||
       passwordRef.current.value === ""
     ) {
-      return setError("All Fields are manadatory.");
+      // return setError("All Fields are manadatory.");
+      toast.error("All Fields are manadatory.");
     }
     setError("");
     try {
@@ -77,7 +79,8 @@ export function Usersignup() {
           usernameRef.current.value = "";
           emailRef.current.value = "";
           passwordRef.current.value = "";
-          return setError("Username or Email Already exist!");
+          //return setError("Username or Email Already exist!");
+          toast.error("Username or Email Already exist!");
         } else {
           dispatch(
             login({
@@ -89,6 +92,7 @@ export function Usersignup() {
               loginfrom: "signup",
             })
           );
+          toast.success("Welcome to wanderlust!");
           return navigate("/", { state: { prevUrl: location.pathname } });
         }
 

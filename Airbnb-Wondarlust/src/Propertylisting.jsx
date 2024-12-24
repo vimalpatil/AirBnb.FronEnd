@@ -6,8 +6,6 @@ import { useLocation } from "react-router-dom";
 export function Propertylisting() {
   const API_URL = "https://localhost:7065/api/Property";
   const [Plist, setPlist] = useState([]);
-  //const [signuplogin, setSignuplogin] = useState(false);
-  //const [isLoggedIn, setIsLoggedIn] = useState(false);
   const location = useLocation();
 
   const user = useSelector(selectUser);
@@ -52,7 +50,7 @@ export function Propertylisting() {
 
   return (
     <>
-      {signuplogin ? (
+      {/* {signuplogin ? (
         <div
           class="alert alert-danger alert-dismissible fade show"
           role="alert"
@@ -67,8 +65,8 @@ export function Propertylisting() {
         </div>
       ) : (
         ""
-      )}
-      {previousPath.current === "/AddNewHome" ? (
+      )} */}
+      {/* {previousPath.current === "/AddNewHome" ? (
         <div
           class="alert alert-danger alert-dismissible fade show"
           role="alert"
@@ -83,8 +81,24 @@ export function Propertylisting() {
         </div>
       ) : (
         ""
-      )}
-      {loginPath ? (
+      )} */}
+      {/* {previousPath.current === "/EditHome" ? (
+        <div
+          class="alert alert-danger alert-dismissible fade show"
+          role="alert"
+        >
+          {"Property updated succesfully!"}
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
+      ) : (
+        ""
+      )} */}
+      {/* {loginPath ? (
         <div
           class="alert alert-danger alert-dismissible fade show"
           role="alert"
@@ -99,7 +113,7 @@ export function Propertylisting() {
         </div>
       ) : (
         ""
-      )}
+      )} */}
 
       <div className="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
         {/* {error && (

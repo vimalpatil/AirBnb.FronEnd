@@ -4,12 +4,10 @@ import { Footer } from "./Footer";
 import NavaBar from "./NavBar";
 import { Propertylisting } from "./Propertylisting";
 import { PropertyDetails } from "./PropertyDetails";
-
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { Usersignup } from "./userSignup";
 import { Login } from "./Login";
-import Map_Coordinates from "./Map_Corrdinates";
-import File_upload from "./File_upload";
+import { EditHome } from "./EditHome";
 function App() {
   return (
     <>
@@ -21,6 +19,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Propertylisting />}></Route>
             <Route path="/AddNewHome" element={<CreateNewHome />}></Route>
+            <Route path="/EditHome/:id" element={<EditHome />}></Route>
             <Route
               path="/HomeDetails/:id"
               element={<PropertyDetails />}

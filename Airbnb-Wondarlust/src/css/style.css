@@ -117,6 +117,7 @@ footer {
 
 .btns {
   display: flex;
+  padding-bottom: 20px;
 }
 
 .show-card {
@@ -129,4 +130,17 @@ footer {
 #map {
   height: 400px;
   width: 80vh;
+}
+
+.toastBody {
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+  color: #10171d; /* #10171D */
+  font-size: 0.875rem !important;
+}
+
+.Toastify__toast--success {
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+  border: 1px solid #3a9ea5 !important;
+  border-radius: 10px !important;
+  background: #fb656f !important;
 }

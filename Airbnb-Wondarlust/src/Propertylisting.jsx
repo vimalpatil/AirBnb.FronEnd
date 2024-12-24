@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { selectUser } from "./features/userSlice";
 import { useLocation } from "react-router-dom";
-import { toast } from "react-toastify";
 
 export function Propertylisting() {
   const API_URL = "https://localhost:7065/api/Property";

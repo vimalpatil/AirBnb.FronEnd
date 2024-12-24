@@ -26,7 +26,8 @@ export default function NavaBar() {
   const handlelogout = (e) => {
     e.preventDefault();
     dispatch(logout());
-    return <Link to="/" />;
+    // return <Link to="/" />;
+    window.location.href = "/";
   };
 
   return (
@@ -66,7 +67,11 @@ export default function NavaBar() {
               <a class="nav-link" href="/AddNewHome">
                 Airbnb your home
               </a>{" "}
-              <form onSubmit={(e) => handlelogout(e)} novalidate>
+              <form
+                onSubmit={(e) => handlelogout(e)}
+                novalidate
+                class="needs-validation"
+              >
                 <button className="btn nav-link">
                   {" "}
                   <b>Log out</b>

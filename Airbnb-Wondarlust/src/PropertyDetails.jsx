@@ -32,25 +32,25 @@ export function PropertyDetails() {
   }, []);
   // console.log(user.userid);
   // console.log(user.user_type);
-  useEffect(() => {
-    let getReviewDetails = async () => {
-      try {
-        let res = await fetch(`https://localhost:7065/api/Review/${id}`);
-        let data = await res.json();
-        setreviewData(data);
-      } catch (err) {
-        console.log("Error in fetching data", err);
-      }
-    };
-    getReviewDetails();
-  }, []);
-  if (user) {
-    if ((user.user_type = "o") && (user.userid = homeData.user_id)) {
-      ShowEditnDelete = true;
-    } else {
-      ShowEditnDelete = false;
-    }
-  }
+  // useEffect(() => {
+  //   let getReviewDetails = async () => {
+  //     try {
+  //       let res = await fetch(`https://localhost:7065/api/Review/${id}`);
+  //       let data = await res.json();
+  //       setreviewData(data);
+  //     } catch (err) {
+  //       console.log("Error in fetching data", err);
+  //     }
+  //   };
+  //   getReviewDetails();
+  // }, []);
+  // if (user) {
+  //   if ((user.user_type = "o") && (user.userid = homeData.user_id)) {
+  //     ShowEditnDelete = true;
+  //   } else {
+  //     ShowEditnDelete = false;
+  //   }
+  // }
 
   // console.log(ShowEditnDelete);
   const onDelete = async (id) => {
@@ -278,7 +278,7 @@ export function PropertyDetails() {
                   <button class="btn btn-outline-dark">Submit</button>
                 </form>
                 <hr />
-                <div>
+                {/* <div>
                   <div class="row">
                     <p> All Reviews</p>
                     {reviewData.map((reviewList, i) => (
@@ -302,7 +302,7 @@ export function PropertyDetails() {
                       </div>
                     ))}
                   </div>
-                </div>
+                </div> */}
               </div>
             ) : (
               ""

@@ -40,7 +40,7 @@ export function Login() {
       });
       if (response.ok) {
         const data = await response.json();
-        console.log(data.user_id);
+        console.log(data.user_type);
 
         if (data.user_id == 0) {
           usernameRef.current.value = "";

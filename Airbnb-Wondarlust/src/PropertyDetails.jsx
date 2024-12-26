@@ -13,7 +13,7 @@ export function PropertyDetails() {
   let ShowEditnDelete;
   const API_URL = `https://localhost:7065/api/Property/${id}`;
   const [homeData, sethomeData] = useState({});
-  const [reviewData, setreviewData] = useState({});
+  const [reviewData, setreviewData] = useState([]);
   const [textAreaValue, setTextAreaValue] = useState("");
   const navigate = useNavigate();
   const navLocation = useLocation();
@@ -32,25 +32,33 @@ export function PropertyDetails() {
   }, []);
   // console.log(user.userid);
   // console.log(user.user_type);
-  // useEffect(() => {
-  //   let getReviewDetails = async () => {
-  //     try {
-  //       let res = await fetch(`https://localhost:7065/api/Review/${id}`);
-  //       let data = await res.json();
-  //       setreviewData(data);
-  //     } catch (err) {
-  //       console.log("Error in fetching data", err);
-  //     }
-  //   };
-  //   getReviewDetails();
-  // }, []);
-  // if (user) {
-  //   if ((user.user_type = "o") && (user.userid = homeData.user_id)) {
-  //     ShowEditnDelete = true;
-  //   } else {
-  //     ShowEditnDelete = false;
-  //   }
-  // }
+  useEffect(() => {
+    let getReviewDetails = async () => {
+      try {
+        let res = await fetch(`https://localhost:7065/api/Review/${id}`);
+        let data = await res.json();
+        setreviewData(data);
+      } catch (err) {
+        console.log("Error in fetching data", err);
+      }
+    };
+    getReviewDetails();
+  }, []);
+  //console.log(reviewData);
+  if (user) {
+    console.log(user.userid);
+    console.log(homeData.user_id);
+    console.log((user.user_type = "o"));
+    console.log(user.userid === homeData.user_id);
+    if ((user.user_type = "o" && user.userid === homeData.user_id)) {
+      // if (user.userid = homeData.user_id) {
+      ShowEditnDelete = true;
+      //}
+    } else {
+      ShowEditnDelete = false;
+    }
+  }
+  console.log(ShowEditnDelete);
 
   // console.log(ShowEditnDelete);
   const onDelete = async (id) => {
@@ -124,6 +132,30 @@ export function PropertyDetails() {
         setTextAreaValue("");
         toast.success("New Review Created!");
         return navigate(`/HomeDetails/${id}`);
+      }
+    } catch (err) {
+      console.log("Data fetching error:", err);
+    }
+  };
+  const onReviewDelete = async (rid) => {
+    console.log(rid);
+    const requestOptions = {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    };
+    try {
+      const res = await fetch(
+        `https://localhost:7065/api/Review/${rid}`,
+        requestOptions
+      );
+      console.log(res.ok);
+      if (!res.ok) {
+        const message = `An error has occured: ${res.status} - ${res.statusText}`;
+        throw new Error(message);
+      } else {
+        toast.success("Review deleted succesfully.");
+        //return navigate(`/HomeDetails/${id}`);
+        window.location.href = `/HomeDetails/${id}`;
       }
     } catch (err) {
       console.log("Data fetching error:", err);
@@ -278,31 +310,34 @@ export function PropertyDetails() {
                   <button class="btn btn-outline-dark">Submit</button>
                 </form>
                 <hr />
-                {/* <div>
+                <div>
                   <div class="row">
                     <p> All Reviews</p>
                     {reviewData.map((reviewList, i) => (
                       <div class="card col-5 ms-3 mb-3">
                         <div class="card-body  mb-3">
-                          <h5 class="card-title">username</h5>
+                          <h5 class="card-title">{reviewList.username}</h5>
                           <p
                             class="starability-result card-text"
-                            data-rating="<%=review.rating%>"
+                            data-rating={reviewList.rating}
                           ></p>
-                          <p class="card-text">comment</p>
+                          <p class="card-text">{reviewList.comment}</p>
                         </div>
 
-                        <form
-                          class="mb-3"
-                          method="post"
-                          action="/listings/<%= listing._id%>/reviews/<%= review._id%>?_method=DELETE"
-                        >
-                          <button class="btn btn-sm btn-dark">Delete</button>
-                        </form>
+                        {user.name == reviewList.username ? (
+                          <button
+                            class="btn btn-sm btn-dark"
+                            onClick={() => onReviewDelete(reviewList.review_id)}
+                          >
+                            Delete
+                          </button>
+                        ) : (
+                          ""
+                        )}
                       </div>
                     ))}
                   </div>
-                </div> */}
+                </div>
               </div>
             ) : (
               ""

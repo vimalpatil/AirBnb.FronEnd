@@ -50,7 +50,8 @@ export function CreateNewHome() {
     }
 
     //console.log(typeof usertype);
-    if ((user.user_type = "o")) {
+    console.log(user.user_type);
+    if (user.user_type == "o") {
       ownerSignup = true;
       console.log(ownerSignup);
     } else {

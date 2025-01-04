@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { selectUser } from "./features/userSlice";
 import { useLocation } from "react-router-dom";
-
+import "./css/filters.css";
 export function Propertylisting() {
   const API_URL = "https://localhost:7065/api/Property";
   const [Plist, setPlist] = useState([]);
@@ -47,6 +47,18 @@ export function Propertylisting() {
   // if (localStorage.getItem("isLogin")) {
   //   setIsLoggedIn(localStorage.getItem("isLogin"));
   // }
+
+  const toggle_tax = () => {
+    let taxInfo = document.getElementsByClassName("tax-info");
+    console.log(taxInfo);
+    for (let info of taxInfo) {
+      if (info.style.display != "inline") {
+        info.style.display = "inline";
+      } else {
+        info.style.display = "none";
+      }
+    }
+  };
 
   return (
     <>
@@ -114,7 +126,87 @@ export function Propertylisting() {
       ) : (
         ""
       )} */}
-
+      <div id="filters">
+        <div class="filter">
+          <div>
+            <i class="fa-solid fa-fire"></i>
+          </div>
+          <p>Trending</p>
+        </div>
+        <div class="filter">
+          <div>
+            <i class="fa-solid fa-bed"></i>
+          </div>
+          <p>Rooms</p>
+        </div>
+        <div class="filter">
+          <div>
+            <i class="fa-solid fa-mountain-city"></i>
+          </div>
+          <p>Iconic Cities</p>
+        </div>
+        <div class="filter">
+          <div>
+            <i class="fa-solid fa-mountain"></i>
+          </div>
+          <p>Mountains</p>
+        </div>
+        <div class="filter">
+          <div>
+            <i class="fa-brands fa-fort-awesome"></i>
+          </div>
+          <p>Castles</p>
+        </div>
+        <div class="filter">
+          <div>
+            <i class="fa-solid fa-person-swimming"></i>
+          </div>
+          <p>Amazing pools</p>
+        </div>
+        <div class="filter">
+          <div>
+            <i class="fa-solid fa-campground"></i>
+          </div>
+          <p>Camping</p>
+        </div>
+        <div class="filter">
+          <div>
+            <i class="fa-solid fa-cow"></i>
+          </div>
+          <p>Farms</p>
+        </div>
+        <div class="filter">
+          <div>
+            <i class="fa-regular fa-snowflake"></i>
+          </div>
+          <p>Arctic</p>
+        </div>
+        <div class="filter">
+          <div>
+            <i class="fa-solid fa-igloo"></i>
+          </div>
+          <p>Dome</p>
+        </div>
+        <div class="filter">
+          <div>
+            <i class="fa-solid fa-ship"></i>
+          </div>
+          <p>Boats</p>
+        </div>
+        <div class="tax-toogle" onClick={toggle_tax}>
+          <div class="form-check-reverse form-switch">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              role="switch"
+              id="flexSwitchCheckDefault"
+            />
+            <label class="form-check-label" for="flexSwitchCheckDefault">
+              Display total after taxes{" "}
+            </label>
+          </div>
+        </div>
+      </div>
       <div className="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
         {/* {error && (
           <div

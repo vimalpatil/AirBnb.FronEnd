@@ -5,17 +5,28 @@ import { useSelector } from "react-redux";
 import { selectUser } from "./features/userSlice";
 import { useDispatch } from "react-redux";
 import { logout } from "./features/userSlice";
-export default function NavaBar() {
+export default function NavaBar({ setSearchTerm }) {
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
   // if (localStorage.getItem("isLogin")) {
   //   setIsLoggedIn(localStorage.getItem("isLogin"));
   // }
+  const [SearchValue, setSearchValue] = useState("");
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
 
   if (user) {
     console.log(user.loginfrom);
   }
+
+  const handleInputChange = (e) => {
+    setSearchValue(e.target.value);
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setSearchTerm(SearchValue);
+    window.location.href = `/${SearchValue}`;
+  };
 
   //console.log(Object.keys(user));
   // for (let r in user) {
@@ -51,11 +62,16 @@ export default function NavaBar() {
             </a>
           </div>
           <div class="navbar-nav ms-auto">
-            <form class="d-flex" role="search">
+            <form
+              class="d-flex"
+              role="search"
+              onSubmit={(e) => handleSearch(e)}
+            >
               <input
                 class="form-control me-2 search-inp"
                 type="search"
                 placeholder="Search destination"
+                onChange={(e) => handleInputChange(e)}
               />
               <button class="btn search-btn" type="submit">
                 <i class="fa-solid fa-magnifying-glass"></i>Search

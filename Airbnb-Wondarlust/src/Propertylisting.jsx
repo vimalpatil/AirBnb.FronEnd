@@ -1,11 +1,22 @@
 import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { selectUser } from "./features/userSlice";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
+
 import "./css/filters.css";
-export function Propertylisting() {
-  const API_URL = "https://localhost:7065/api/Property";
+export function Propertylisting({ searchTerm }) {
+  const { search } = useParams();
+  // const [error, setError] = useState("");
+  let error;
+  let API_URL;
+
+  if (search) {
+    API_URL = `https://localhost:7065/api/Property/location/${search}`;
+  } else {
+    API_URL = "https://localhost:7065/api/Property";
+  }
   const [Plist, setPlist] = useState([]);
+  // const [Plistbyloction, setPlistbylocation] = useState([]);
   const location = useLocation();
 
   const user = useSelector(selectUser);
@@ -29,21 +40,54 @@ export function Propertylisting() {
       signuplogin = 0;
     }
   }
+  console.log(searchTerm);
+  // if (searchTerm) {
+  //   console.log(searchTerm);
 
+  //   let getPropertyList = async () => {
+  //     try {
+  //       let response = await fetch(
+  //         `https://localhost:7065/api/Property/location/${searchTerm}`
+  //       );
+
+  //       let jsonResponse = await response.json();
+  //       //  console.log(jsonResponse);
+  //       setPlistbylocation(jsonResponse);
+  //       // console.log(setPlistbylocation);
+  //     } catch (err) {
+  //       console.log("Data fetching error:", err);
+  //     }
+  //   };
+  //   getPropertyList();
+  // } else {
+  // console.log(API_URL);
+  // setError("");
   useEffect(() => {
     let getPropertyList = async () => {
       try {
         let response = await fetch(API_URL);
 
         let jsonResponse = await response.json();
+        console.log(jsonResponse.length);
+        // if (jsonResponse.length === 0) {
+        //   error = "No Homes are availabel in this Location!";
+        //   // setError("No Homes are availabel in this Location!");
+        // } else {
         setPlist(jsonResponse);
+        console.log(Plist.length);
+
+        // }
       } catch (err) {
         console.log("Data fetching error:", err);
       }
     };
     getPropertyList();
   }, []);
-
+  // }
+  if (Plist.length == 0) {
+    error = "No Homes are availabel in this Location!";
+  }
+  console.log(error);
   // if (localStorage.getItem("isLogin")) {
   //   setIsLoggedIn(localStorage.getItem("isLogin"));
   // }
@@ -208,7 +252,7 @@ export function Propertylisting() {
         </div>
       </div>
       <div className="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
-        {/* {error && (
+        {error ? (
           <div
             class="alert alert-danger alert-dismissible fade show"
             role="alert"
@@ -221,8 +265,33 @@ export function Propertylisting() {
               aria-label="Close"
             ></button>
           </div>
-        )} */}
+        ) : (
+          ""
+        )}
+        {/* {Plistbyloction.map((propListbyloction, i) => (
+          <a
+            href={`/HomeDetails/${propListbyloction.p_id}`}
+            class="listing-link"
+          >
+            <div className="card col listing-card">
+              <img
+                src={`/images/${propListbyloction.image_name}`}
+                className="card-img-top"
+                alt="listing_image"
+                style={{ height: "20rem" }}
+              />
 
+              <div className="card-body">
+                <p className="card-text" key={i}>
+                  <b>{propListbyloction.title}</b>
+                  <br />
+                  &#8377; {propListbyloction.price}
+                  <i className="tax-info">&nbsp;&nbsp;+18% GST</i>
+                </p>
+              </div>
+            </div>
+          </a>
+        ))} */}
         {Plist.map((propList, i) => (
           <a href={`/HomeDetails/${propList.p_id}`} class="listing-link">
             <div className="card col listing-card">

@@ -9,13 +9,19 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { Usersignup } from "./userSignup";
 import { Login } from "./Login";
 import { EditHome } from "./EditHome";
+import { Map } from "./Map";
+import { Map_reactgl } from "./Map_reactgl";
+
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
   return (
     <>
       {/* <Map_Coordinates />
       <File_upload /> */}
+      {/* <Map /> */}
+      {/* <Map_reactgl /> */}
       <NavaBar setSearchTerm={setSearchTerm} />
+
       <div className="container">
         <BrowserRouter>
           <Routes>

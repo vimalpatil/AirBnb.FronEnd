@@ -3,7 +3,10 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectUser } from "./features/userSlice";
 import { toast } from "react-toastify";
+import mapboxgl from "mapbox-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
 import "./css/rating.css";
+// import "./js/map.js";
 import { useNavigate, useLocation } from "react-router-dom";
 export function PropertyDetails() {
   const { id } = useParams();
@@ -17,21 +20,65 @@ export function PropertyDetails() {
   const [textAreaValue, setTextAreaValue] = useState("");
   const navigate = useNavigate();
   const navLocation = useLocation();
+  let coordinates;
+  const mapContainer = useRef(null);
+  const map = useRef(null);
+  let cordi = [];
+  const MAPBOX_TOKEN =
+    "pk.eyJ1IjoiaXRzc2FyYW5oZXJlIiwiYSI6ImNsd3B3aDFybjFodTMyaXJ6cGQxeWdwYzcifQ.4HPJRlRvgTdHaXXTDQEWCg";
+
+  const [lng, setLng] = useState(77.1025);
+  const [lat, setLat] = useState(28.7041);
+
   useEffect(() => {
     let getHomedetails = async () => {
       try {
         let getResponse = await fetch(API_URL);
         let jsonResponse = await getResponse.json();
-        console.log(jsonResponse);
+        // console.log(jsonResponse);
         sethomeData(jsonResponse);
+        coordinates = jsonResponse.geometry_coordinate;
+        //console.log(homeData.geometry_coordinate);
+
+        cordi = coordinates.split(",");
+        setLat(cordi[0]);
+        setLng(cordi[1]);
       } catch (err) {
         console.log("Error in fetching data", err);
       }
+      //console.log(coordinates);
     };
     getHomedetails();
-  }, []);
+  }, [homeData]);
+  // console.log(homeData.geometry_coordinate);
+  //show map on page
+  //coordinates = `${homeData.geometry_coordinate}`;
+  //console.log(cordi[0]);
+
+  useEffect(() => {
+    if (map.current); // initialize map only once
+    mapboxgl.accessToken = MAPBOX_TOKEN;
+    map.current = new mapboxgl.Map({
+      container: mapContainer.current,
+      style: "mapbox://styles/mapbox/streets-v11",
+      center: [lng, lat],
+      zoom: 7,
+    });
+
+    new mapboxgl.Marker({ color: "red" })
+      .setLngLat([lng, lat])
+      .setPopup(
+        new mapboxgl.Popup({ offset: 25 }).setHTML(
+          `<h3>${homeData.title}</h3><p>Exact loction will provided after booking!</p>`
+        )
+      )
+      .addTo(map.current);
+    return () => map.current.remove();
+  }, [lat, lng, 7]);
+
   // console.log(user.userid);
   // console.log(user.user_type);
+  //Review details
   useEffect(() => {
     let getReviewDetails = async () => {
       try {
@@ -46,10 +93,10 @@ export function PropertyDetails() {
   }, []);
   //console.log(reviewData);
   if (user) {
-    console.log(user.userid);
-    console.log(homeData.user_id);
-    console.log((user.user_type = "o"));
-    console.log(user.userid === homeData.user_id);
+    // console.log(user.userid);
+    // console.log(homeData.user_id);
+    // console.log((user.user_type = "o"));
+    // console.log(user.userid === homeData.user_id);
     if ((user.user_type = "o" && user.userid === homeData.user_id)) {
       // if (user.userid = homeData.user_id) {
       ShowEditnDelete = true;
@@ -58,7 +105,7 @@ export function PropertyDetails() {
       ShowEditnDelete = false;
     }
   }
-  console.log(ShowEditnDelete);
+  //console.log(ShowEditnDelete);
 
   // console.log(ShowEditnDelete);
   const onDelete = async (id) => {
@@ -161,6 +208,7 @@ export function PropertyDetails() {
       console.log("Data fetching error:", err);
     }
   };
+
   return (
     <>
       <div className="container">
@@ -343,6 +391,10 @@ export function PropertyDetails() {
               ""
             )}
           </div>
+        </div>
+        <div class="col-8 offset-3 mb-3">
+          <h3>Where you'll be</h3>
+          <div ref={mapContainer} style={{ width: "500px", height: "450px" }} />
         </div>
       </div>
     </>

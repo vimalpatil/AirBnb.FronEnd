@@ -7,7 +7,7 @@ import "./css/filters.css";
 export function Propertylisting({ searchTerm }) {
   const { search } = useParams();
   // const [error, setError] = useState("");
-  let error;
+  let error = "";
   let API_URL;
 
   if (search) {
@@ -40,7 +40,7 @@ export function Propertylisting({ searchTerm }) {
       signuplogin = 0;
     }
   }
-  console.log(searchTerm);
+  //console.log(searchTerm);
   // if (searchTerm) {
   //   console.log(searchTerm);
 
@@ -61,7 +61,7 @@ export function Propertylisting({ searchTerm }) {
   //   getPropertyList();
   // } else {
   // console.log(API_URL);
-  // setError("");
+  //setError("");
   useEffect(() => {
     let getPropertyList = async () => {
       try {
@@ -84,10 +84,14 @@ export function Propertylisting({ searchTerm }) {
     getPropertyList();
   }, []);
   // }
-  if (Plist.length == 0) {
-    error = "No Homes are availabel in this Location!";
+  if (search) {
+    if (Plist.length == 0) {
+      error = "No Homes are availabel in this Location!";
+    }
+  } else {
+    error = "";
   }
-  console.log(error);
+  //console.log(error);
   // if (localStorage.getItem("isLogin")) {
   //   setIsLoggedIn(localStorage.getItem("isLogin"));
   // }
